@@ -1,21 +1,43 @@
-TARGET = eInkDmg
 CC = gcc
-CFLAGS = -g -o -ffunction-sections -fdate-sections -Wall
 
-SRC_DIR = src
-OBJ_DIR = build
+CFLAGS = -Wall -Werror -Wno-unused-function -g
 
-SRCS = $(shell find $(SRC_DIR) -name '*.c')
-OBJS = $(pathsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+LDFLAGS = -mconsole
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+SRC_DIR = ./src
+BUILD_DIR = ./build
+CONFIG_DIR = $(SRC_DIR)/config
+OBJ_DIR = $(BUILD_DIR)/obj
+OBJ_CONFIG_DIR = $(OBJ_DIR)/config
+BIN_DIR = $(BUILD_DIR)/bin
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.C
-	@mkdir -p $(dir $@)
+TARGET = $(BIN_DIR)/e-ink-dmg
+
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(CONFIG_DIR)/*.c)
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
+OBJ_FILES := $(patsubst $(CONFIG_DIR)/%.c, $(OBJ_CONFIG_DIR)/%.o, $(OBJ_FILES))
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ_FILES) | $(BIN_DIR)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_CONFIG_DIR)/%.o: $(CONFIG_DIR)/%.c | $(OBJ_CONFIG_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(OBJ_CONFIG_DIR):
+	mkdir -p $(OBJ_CONFIG_DIR)
+
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+.PHONY: all clean

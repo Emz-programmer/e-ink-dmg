@@ -6,15 +6,15 @@
     TODO: Hotswap between dynamic and partial refresh based off data diff
 */
 
-#include "EPD_1in54_V2.h"
+#include "./config/EPD_1in54_V2.h"
+#include <stdio.h>
+#include "Renderer.h"
 
-
-int Renderer(void)
+void Renderer(void)
 {
-    EPD_1in54b_V2_Init();
-    Paint_Clear(WHITE);
+    EPD_1IN54_V2_Init();
+    
+    printf("Hello World");
 
-    Paint_DrawPoints(5, 10, BLACK, DOT_PIXEL_1X1 DOT_STYLE_DFT);
-
-    return 0;
+    return;
 }
