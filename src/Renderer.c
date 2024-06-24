@@ -7,14 +7,37 @@
 */
 
 #include "./config/EPD_1in54_V2.h"
+#include "./config/GUI_Paint.h"
 #include <stdio.h>
 #include "Renderer.h"
 
-void Renderer(void)
-{
+void Renderer(void){
     EPD_1IN54_V2_Init();
-    
+
     printf("Hello World");
 
+    test_render();
+
     return;
+}
+
+void test_render(void){
+    //Partial refresh, plot 1 pixel at a time to make screen black...
+    EPD_1IN54_V2_Clear();
+    EPD_1IN54_V2_Init_Partial();
+    int y_pos = 0;
+
+    for(; y_pos < 200; y_pos++){
+        render_row(y_pos);
+    }   
+}
+
+void render_row(int y_pos){
+    int x_pos = 0;
+
+    for (; x_pos < 200; x_pos++){
+        //plot pixel x_pos/y_pos
+        Paint_SetPixel(x_pos, y_pos, BLACK);
+    }
+    EPD_1IN54_V2_Sleep();
 }
