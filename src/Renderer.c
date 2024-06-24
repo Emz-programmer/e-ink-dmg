@@ -19,7 +19,7 @@ int Renderer(void){
     EPD_1IN54_V2_Init();
     EPD_1IN54_V2_Clear();
 
-    printf("Hello World");
+    printf("Hello World\r\n");
 
     test_render();
 
@@ -28,14 +28,24 @@ int Renderer(void){
 
 void test_render(void){
     //Partial refresh, plot 1 pixel at a time to make screen black...
+    UBYTE *BlackImage;
+    UWORD Imagesize = ((EPD_1IN54_V2_WIDTH % 8 == 0)? (EPD_1IN54_V2_WIDTH / 8 ): (EPD_1IN54_V2_WIDTH / 8 + 1)) * EPD_1IN54_V2_HEIGHT;
+    if((BlackImage = (UBYTE *)malloc(Imagesize)) == NULL) {
+        printf("Failed to apply for black memory...\r\n");
+        return;
+    }
+    printf("Paint_NewImage\r\n");
+    Paint_NewImage(BlackImage, EPD_1IN54_V2_WIDTH, EPD_1IN54_V2_HEIGHT, 270, WHITE);
+    
     EPD_1IN54_V2_Clear();
     DEV_Delay_ms(2000);
-    printf("Preparing scanlines");
+    printf("Preparing scanlines\r\n");
     EPD_1IN54_V2_Init();
     int y_pos = 0;
 
     for(; y_pos < 200; y_pos++){
         render_row(y_pos);
+        Paint_SelectImage(BlackImage);
     }   
 }
 
