@@ -18,6 +18,8 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 OBJ_FILES := $(patsubst $(CONFIG_DIR)/%.c, $(OBJ_CONFIG_DIR)/%.o, $(OBJ_FILES))
 OBJ_FILES := $(patsubst $(FONTS_DIR)/%.c, $(OBJ_FONTS_DIR)/%.o, $(OBJ_FILES))
 
+LIB_RPI=-wl,--gc-sections llgpio -lm
+
 all: $(TARGET)
 
 $(TARGET): $(OBJ_FILES) | $(BIN_DIR)
