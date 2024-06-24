@@ -1,7 +1,5 @@
 #include "Renderer.h"
 
-int main(int argc, char* argv[]){
-    Renderer();
-    
-    return 0;
+int main(int argc, char* argv[]){    
+    return Renderer();
 }

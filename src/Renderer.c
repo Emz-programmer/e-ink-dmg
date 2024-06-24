@@ -11,20 +11,27 @@
 #include <stdio.h>
 #include "Renderer.h"
 
-void Renderer(void){
+int Renderer(void){
+    if(DEV_Module_Init()!=0){
+        return -1;
+    }
+
     EPD_1IN54_V2_Init();
+    EPD_1IN54_V2_Clear();
 
     printf("Hello World");
 
     test_render();
 
-    return;
+    return 0;
 }
 
 void test_render(void){
     //Partial refresh, plot 1 pixel at a time to make screen black...
     EPD_1IN54_V2_Clear();
-    EPD_1IN54_V2_Init_Partial();
+    DEV_Delay_ms(2000);
+    printf("Preparing scanlines");
+    EPD_1IN54_V2_Init();
     int y_pos = 0;
 
     for(; y_pos < 200; y_pos++){

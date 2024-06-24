@@ -2,7 +2,7 @@
 
 #ifndef RENDERER_H
 #define RENDERER_H
-void Renderer(void);
+int Renderer(void);
 void test_render(void);
 void render_row(int);
 #endif 
